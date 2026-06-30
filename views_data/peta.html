@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Peta Fasilitas Kampus</title>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    />
+    <style>
+      #map {
+        height: 500px;
+        width: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Peta Fasilitas di Sekitar Kampus</h1>
+    <div id="map"></div>
+    <div style="margin-top: 20px">
+      <a
+        href="/admin/"
+        target="_blank"
+        style="
+          padding: 10px;
+          background: #007bff;
+          color: white;
+          text-decoration: none;
+          border-radius: 5px;
+        "
+      >
+        Kelola Data Lokasi
+      </a>
+    </div>
+    <h3>Daftar Fasilitas:</h3>
+    <ul>
+      {% for item in data %}
+      <li>
+        {{ item.nama }} (Lat: {{ item.latitude }}, Long: {{ item.longitude }})
+      </li>
+      {% endfor %}
+    </ul>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+      var map = L.map('map').setView([-6.362, 106.834], 15);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+
+      // Menambahkan marker dari database
+      {% for item in data %}
+          L.marker([{{ item.latitude }}, {{ item.longitude }}]).addTo(map)
+           .bindPopup("<b>{{ item.nama }}</b>");
+      {% endfor %}
+    </script>
+  </body>
+</html>
